@@ -2,7 +2,19 @@
 
 Contents:
 
-* [](#)
+* [Introduction](#introduction)
+  * [What is Pretty Good Privacy?](#what-is-pretty-good-privacy)
+  * [What is GNU Privacy Guard?](#what-is-gnu-privacy-guard)
+  * [What is a digital signature?](#what-is-a-digital-signature)
+* [Setup for your computer](#setup-for-your-computer)
+  * [There are many ways to do this](#there-are-many-ways-to-do-this)
+  * [Setup for macOS users](#setup-for-macos-users)
+  * [Setup for Windows users](#setup-for-windows-users)
+  * [Setup for Linux users](#setup-for-linux-users)
+* [Create your PGP key](#create-your-pgp-key)
+* [Verify your new key is included in GPG](#verify-your-new-key-is-included-in-gpg)
+  * [Verify your new key by using its id](#verify-your-new-key-by-using-its-id)
+* [Export your PGP key files](#export-your-pgp-key-files)
 
 
 ## Introduction
