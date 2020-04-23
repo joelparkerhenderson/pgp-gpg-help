@@ -58,7 +58,7 @@ Examples of browser extensions:
 
 * [Mailvelope](https://addons.mozilla.org/en-US/firefox/addon/mailvelope/): adds encryption and decryption features to the user interface of common webmail providers, including Gmail, Outlook, and more. It supports the PGP encryption standard (OpenPGP, GPG) and is compatible with other PGP applications. Encrypt files on your hard drive with Mailvelope and send encrypted email attachments.
 
-* [https://chrome.google.com/webstore/detail/pgp-anywhere/cdlcdnmhcodhagbmljapgbjdimjckilb): Use PGP wherever you are, including encryption and digital signatures. Features full clientside encryption of your keyring, cloud synchronization, anonymous use, and more. Simple, fast, and open source.
+* [https://github.com/joelparkerhenderson/pgp_gpg_help](https://chrome.google.com/webstore/detail/pgp-anywhere/cdlcdnmhcodhagbmljapgbjdimjckilb): Use PGP wherever you are, including encryption and digital signatures. Features full clientside encryption of your keyring, cloud synchronization, anonymous use, and more. Simple, fast, and open source.
 
 
 ### Setup for macOS users
