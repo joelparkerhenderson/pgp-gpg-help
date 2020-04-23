@@ -128,6 +128,8 @@ Create your personal PGP key with our typical settings for OpenPGP:
 gpg --full-gen-key --openpgp
 ```
 
+If you want to cancel the program at any time, press control-c.
+
 The program requires you to complete the setup in a short amount of time. If you run out of time, that's fine.
 
 If the program prompts:
@@ -257,9 +259,6 @@ A passphrase should contain at least 1 digit or special character.
 ```
 
 Try a new passphrase that is longer, more complex, and has a digit and a special character such as punctuation.
-
-
-TODO how do I cancel? ctrl-C
 
 The program may say “We need to generate some random information....” Follow the instructions on your screen.
 
