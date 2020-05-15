@@ -15,6 +15,11 @@ Contents:
 * [Verify your new key is included in GPG](#verify-your-new-key-is-included-in-gpg)
   * [Verify your new key by using its id](#verify-your-new-key-by-using-its-id)
 * [Export your PGP key files](#export-your-pgp-key-files)
+* [Encrypt](#encrypt)
+* [Decrypt](#decrypt)
+* [Decrypt with base64](#decrypt-with-base64)
+  * [For macOS](#for-macos)
+  * [Decrypt the file](#decrypt-the-file)
 
 
 ## Introduction
@@ -89,9 +94,10 @@ command not found: brew
 
 ...then go to https://brew.sh/ and follow the instructions to install Homebrew.
 
-Ensure brew is up to date and working correctly:
+Ensure Xcode is installed, and brew is up to date and working correctly:
 
 ```
+xcode-select --install
 brew update
 brew upgrade
 brew cleanup
@@ -101,6 +107,7 @@ brew doctor
 Install GPG with brew by typing:
 
 ```
+brew install pkg-config
 brew install gpg
 ```
 
@@ -417,9 +424,58 @@ gpg --export-secret-key --armor <id>
 You can now share your file `pgp-public-key-block.txt` with anyone you want.
 
 
+## Encrypt
+
+Suppose you want to encrypt a message.
+
+Create a typical text file with a file name such as `message.txt`
+
+Put some text in it such as:
+
+```
+hello world
+```
+
+Encrypt with your own public key:
+
+```
+gpg --encrypt --recipient alice@example.com --output message.gpg message.txt
+```
+
+GPG creates a new encrypted file with the file name `message.gpg` 
+
+The encrypted file is now fully protected, and only you are able to decrypt it, because only you have the private key.
+
+If you want to encrypt a message for someone else, then you obtain their public key, add it to your GPG, and then you can encrypt a message with their public key. Learn about this in the [GPG manual](https://www.gnupg.org/documentation/manuals/gnupg/)
+
+
 ## Decrypt
 
-Suppose you want to descrypt a PGP message, such as this PGP message that is also encdoded using base64:
+Suppose you want to decrypt a message, such as the file `message.gpg` from the section above.
+
+```
+gpg --decrypt message.gpg
+```
+
+The output should show information about the encryption, the key, and the message text, such as:
+
+```
+gpg: encrypted with 4096-bit RSA key, ID 20207FFA970D5D16, created 2020-03-23
+      "Alice Adams <alice@example.com>"
+hello world
+```
+
+If you want to decrypt a stream, you can pipe input into GPG such as:
+
+```
+cat message.gpg | gpg --decrypt
+```
+
+
+## Decrypt with base64
+
+
+Suppose you want to decrypt a message, such as this message text that is also encdoded using base64:
 
 ```
 wcFMAyAgf/qXDV0WARAALV0cccfFRBwUBpnj4f8wf7V+GJXHlfDJHfFuVx+V7GZr3PQqKkTH5l
@@ -450,9 +506,9 @@ When you save the message text, be careful about your text editor:
 
 Examples for specific text edtiors:
 
-* For text editor "vi" or "vim": the message text typically goes all the way across your screen multiple times; at the bottom, the status line indicates the text has no end-of-line and is 1 line long such as: `"~/message.pgp" [noeol] 1L, 836C`.
+* For text editor "vi" or "vim": the message text typically goes all the way across your screen multiple times; at the bottom, the status line indicates the text has no end-of-line and is 1 line long such as: `"~/message.gpg" [noeol] 1L, 836C`.
 
-* For text editor "emacs": the message text typically goes all the way across your screen multiple times; at the bottom, the status line indicates the text has 1 line long such as: `message.pgp All (1,0)`.
+* For text editor "emacs": the message text typically goes all the way across your screen multiple times; at the bottom, the status line indicates the text has 1 line long such as: `message.gpg All (1,0)`.
 
 * For text editor "Sublime": you may want to turn on visual line numbering; the text area left column indicates that your text  is 1 line.
 
@@ -518,8 +574,50 @@ If you get this error...
 gpg-agent[…]: no gpg-agent running in this session
 ```
 
+..then verify that your versions of `gpg-agent` and `gpg` are identical and 2.2 or higher - this isn't strictly necessary yet it's good practice and can help protect you from incompatibility bugs:
+
+```
+gpg-agent --version 
+gpg --version
+```
+
 ...then try replacing the program `gpg` with `gpg2` like this:
 
 ```
 cat message.gpg | base64 --decode | GPG_TTY=$(tty) gpg2 --decrypt
 ```
+
+If you get this error...
+
+```
+command not found: gpg2
+```
+
+...then verify you have GPG 2.x:
+
+```
+brew info gpg 
+```
+
+...and you should see something like:
+
+```
+gnupg: stable 2.2.20 (bottled)
+GNU Pretty Good Privacy (PGP) package
+```
+
+If you try this...
+
+```
+brew install pkg-config
+```
+
+...and get this kind of error message...
+
+```
+pkg-config is outdated
+```
+
+...then you need to update your system softwrare, such as by using the instructions near the top of this document.
+
+If you're still having issues, see https://serverfault.com/questions/481103/gpg-agent-says-agent-exists-but-gpg-says-agent-doesnt-exist
