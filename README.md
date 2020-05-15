@@ -63,6 +63,10 @@ Examples of browser extensions:
 
 ### Setup for macOS users
 
+Ensure your macOS is fully up to date:
+
+* Choose the Apple menu, then "About this Mac", then click the button "Software Update".
+
 Open the app “Terminal”.
 
 Check if you have the terminal tool “Homebrew” available by entering this:
@@ -84,6 +88,15 @@ command not found: brew
 ```
 
 ...then go to https://brew.sh/ and follow the instructions to install Homebrew.
+
+Ensure brew is up to date and working correctly:
+
+```
+brew update
+brew upgrade
+brew cleanup
+brew doctor
+```
 
 Install GPG with brew by typing:
 
@@ -403,3 +416,80 @@ gpg --export-secret-key --armor <id>
 
 You can now share your file `pgp-public-key-block.txt` with anyone you want.
 
+
+## Decrypt
+
+Suppose you want to descrypt a PGP message, such as this PGP message that is also encdoded using base64:
+
+```
+wcFMAyAgf/qXDV0WARAALV0cccfFRBwUBpnj4f8wf7V+GJXHlfDJHfFuVx+V7GZr3PQqKkTH5l
+Wyjq1kWwpnNXoUn4Fcn+N9WM2XgHPeN0+t5wsNezrzmlNbhHfmFW5kB1RKJQB3rGWnnyj4HSDV
+sCIFJz+yxna/UKh7wM0wrvTcIns+ItLioWkA/Oq7bcS9cINm8HcSFZ6VY2p4rLg6qbk+wjkQ2c
+PAss2h52hMzITKbRxvThJfqiT8xIPjZacHSTeGbfnzof5VWyi5sBdriZri4xmZPBRyzgesyVZM
+IqBIzx85GkMTPp8OXJh7N51sQiPd3E9xoW5ZmTXGDGfgatmMWpE27QFKUnNWSJ/braqaHZCsWk
+/ZOeEJjgrFEvjZD7ajyTTRAi1Y40BscYTLuGoJ6xb9GDxyoJ809jXgynQTkQ+XaRVphCkAYPON
+ikniukjUd3x4qQp2gHGLtzLrmbm9Dvx0Mk/nRwnTc52+llft+WF/2TMivD/y2wb5qIp0m8pM0p
+YrXoAMh1wOHUwVFrkVz/WsQIH3AfTpPl4iyPdQzL5t6kdKq7QMuQNlKzK8oBHFVTYFdNiQ5//l
+zZ0DrB2NT+DXS5sdw3z8BHpYWyOwvXb34F98B3aid+nwifBU5b9rERn2Y0Y9U19xUVXgWNg2uo
+1aqD5gFWhgTaK6dQSbTKbtKTb/pH+8mfVDDrS4AHkHEMst740umPEq8SMU/PLSOGQw+DL4PDh2
+HXgYuL3nYbz4F7lI8jd/3T5HC61x+g55LuOWeV57mhm/K0lDRm/KkOEtX/gROSB/CfNBou8DHz
+iIPNq2O1w4gskB1rh21oA
+```
+
+Save the message text in a new file, such as file name `message.gpg`.
+
+* The message text must be all one line, with no spaces, no newlines, no returns.
+
+* The slash character is a normal character, not a line wrapping character.
+
+When you save the message text, be careful about your text editor:
+
+* Some text editors automatically insert extra line wrapping characters, or an extra final newline character; delete these extras.
+
+* Some text editors show visual line wrapping, even without the presence of line wrapping characters; ignore this visual line wrapping.
+
+Examples for specific text edtiors:
+
+* For text editor "vi" or "vim": the message text typically goes all the way across your screen multiple times; at the bottom, the status line indicates the text has no end-of-line and is 1 line long such as: `"~/message.pgp" [noeol] 1L, 836C`.
+
+* For text editor "emacs": the message text typically goes all the way across your screen multiple times; at the bottom, the status line indicates the text has 1 line long such as: `message.pgp All (1,0)`.
+
+* For text editor "Sublime": you may want to turn on visual line numbering; the text area left column indicates that your text  is 1 line.
+
+
+### For macOS
+
+You might need extra steps to decrypt the password:
+
+``` 
+brew install pinentry-mac
+
+echo "pinentry-program /usr/local/bin/pinentry-mac" \
+>> ~/.gnupg/gpg-agent.conf
+
+killall gpg-agent
+```
+
+
+### Decrypt the file
+
+Decrypt the password:
+
+```
+cat message.gpg | base64 --decode | GPG_TTY=$(tty) gpg --decrypt
+```
+
+If you get this error:
+
+```
+gpg: encrypted with 4096-bit RSA key, ID 10972DD260CD2D6B, created 2020-01-01
+      "Alice Adams <alice@example.com>"
+gpg: public key decryption failed: No such file or directory
+gpg: decryption failed: No secret key
+```
+
+The verify that you have the secret key:
+
+```
+gpg --list-secret-keys
+```
