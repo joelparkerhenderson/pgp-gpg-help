@@ -143,7 +143,7 @@ Then just run it again:
 gpg --full-gen-key --openpgp
 ```
 
-The command prompts for choices, such as one or more of the items below.
+The command prompts for choices, such as one or more of the items below. Choose RSA and RSA. This is typically the default.
 
 ```
 Please select what kind of key you want:
@@ -152,7 +152,6 @@ Please select what kind of key you want:
    (3) DSA (sign only)
 ```
 
-Choose RSA and RSA. This is typically the default.
 
 
 The program prompts:
