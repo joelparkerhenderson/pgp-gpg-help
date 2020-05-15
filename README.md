@@ -467,7 +467,11 @@ brew install pinentry-mac
 echo "pinentry-program /usr/local/bin/pinentry-mac" \
 >> ~/.gnupg/gpg-agent.conf
 
+gpgconf --kill gpg-agent
+
 killall gpg-agent
+
+gpg-agent
 ```
 
 
@@ -479,7 +483,7 @@ Decrypt the password:
 cat message.gpg | base64 --decode | GPG_TTY=$(tty) gpg --decrypt
 ```
 
-If you get this error:
+If you get this error...
 
 ```
 gpg: encrypted with 4096-bit RSA key, ID 10972DD260CD2D6B, created 2020-01-01
@@ -488,8 +492,34 @@ gpg: public key decryption failed: No such file or directory
 gpg: decryption failed: No secret key
 ```
 
-The verify that you have the secret key:
+...then verify that you do hav your corresponding secret key:
 
 ```
 gpg --list-secret-keys
+```
+
+If you stil get the error, then try restarting the program `gpg-agent` such as:
+
+```
+gpgconf --kill gpg-agent
+killall gpg-agent
+gpg-agent
+```
+
+...then you should see:
+
+```
+gpg-agent[…]: gpg-agent running and available
+```
+
+If you get this error...
+
+```
+gpg-agent[…]: no gpg-agent running in this session
+```
+
+...then try replacing the program `gpg` with `gpg2` like this:
+
+```
+cat message.gpg | base64 --decode | GPG_TTY=$(tty) gpg2 --decrypt
 ```
